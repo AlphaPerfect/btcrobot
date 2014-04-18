@@ -1,68 +1,19 @@
-BTC Robot
+BTC/LTC Robot
 ===========
-BTC操盘手自动化交易引擎
-BTC捐赠地址：1NDnnWCUu926z4wxA3sNBGYWNQD3mKyes8
+BTC/LTC自动化算法交易引擎
 
-注：WEB部分基于studygolang框架。
+![btcrobot logo](https://raw.githubusercontent.com/philsong/btcrobot/master/static/img/hacking-bitcoin-with-go.png)
 
-# 本地搭建 #
-
-1、下载 btcrobot 代码
-	
-	git clone https://github.com/philsong/btcrobot
-
-2、下载安装依赖库（如果依赖库下载不下来可以联系我）
-
-	cd btcrobot/websites/code/thirdparty
-	// windows 下执行
-	getpkg.bat
-	// linux/mac 下执行
-	sh getpkg
-
-3、编译并运行 btcrobot
-
-先编译
-
-	// 接着上一步
-	cd ../btcbot/
-	// windows 下执行
-	install.bat
-	// linux/mac 下执行
-	sh install
-	
-这样便编译好了 btcrobot，下面运行 btcrobot。（运行前可以根据需要修改 config/ 配置）
-
-	// windows 下执行
-	启动我.bat
-	// linux/mac 下执行
-	sh start
-
-一切顺利的话，btcrobot应该就启动了。
-
-4、浏览器中查看
-
-在浏览器中输入：http://127.0.0.1:9090
-
-应该就能看到了。
-
-5、建立数据库
-
-运行起来了，但没有建数据库。源码中有一个 databases 文件夹，里面有建表和初始化的sql语句。之前这些sql之前，在mysql数据库中建立一个数据库：btcrobot，之后执行这些sql语句。
-
-根据你的数据库设置，修改上面提到的 `config/config.json` 对应的配置，重新启动 btcrobot.（通过restart脚本重新启动）
-
-支持sqlite3和MySql
-
-
-/*
- *BTC操盘手自动化交易引擎
-  btcbot is a Bitcoin trading bot for HUOBI.com written
-  in golang, it features multiple trading methods using
-  technical analysis.
+  btcrobot is a Bitcoin, Litecoin and Altcoin trading bot written in golang,
+  it features multiple trading methods using technical analysis.
 
   Disclaimer:
 
   USE AT YOUR OWN RISK!
+  
+  声明：
+  
+  本软件风险巨大！！！使用前务必小量测试N天！！！目前还在快速完善发展中，欢迎各路程序员贡献代码！
 
   The author of this project is NOT responsible for any damage or loss caused
   by this software. There can be bugs and the bot may not perform as expected
@@ -70,32 +21,107 @@ BTC捐赠地址：1NDnnWCUu926z4wxA3sNBGYWNQD3mKyes8
   backtesting on historical data. Also look at the code to see what how
   it's working.
 
+  Weibo:http://weibo.com/bocaicfa
 
- *@feedback http://weibo.com/bocaicfa
- *@Version 0.10
- *@time 2014-01-06 support auto process: login/buy/sell/update/cancel/delegation query/auto trade
- *@Version 0.11
- *@time 2014-01-09 support query details transaction data:buy/sell/trade/topsell/topbuy/new/high/low/last/...
-  @Version 0.12
- *@time 2014-01-10 support query my trade info, 5min/1day/1week/... kline data and real trx data
- 				   support okcoin.com K-line via highchart
- *@Version 0.13
- *@time 2014-01-13 support EMA line to indict the time to buy and sell simulately, support diff factor
- 				   support web interface to display MA/EMA/MACD/Trender line too
- *@Version 0.14
- *@time 2014-01-14 support EMA line to indict the time to buy and sell in huobi.com
- *@Version 0.15
- *@time 2014-01-16 support send alert email when triger buy/sell point
- *@Version 0.16
- *@time 2014-01-27 support huibi official API,optimize MACD enter point
- *@Version 0.17
- *@time 2014-02-08 support the 5mintes momentum theory in fx
- *@Version 0.18
- *@time 2014-02-10 simplify the 5mintes momentum theory, only keep three key points:"enter"/"stop"/"exit" 
- *@Version 0.19
- *@time 2014-03-01 add the web UI to config option
- *
- *
- *@go语言(模拟登陆huobi.com平台)+(官方API)实现自动化套利
- *
- */
+
+支持多个交易平台-火币、OKCoin，自动买卖，机器人EMA算法，MACD算法，MIX算法
+
+程序达成如下目标：上涨时获取中间段的利润；下跌时逃顶，跑赢大盘，比大盘跌的少；横盘时可能高买低卖，需要自行配置参数调整。。
+还有一种策略叫买入并持有，buy and hold，亦是一种选择。
+
+
+举个例子，假设一个IT男，上班时根本没时间一直看盘。
+往往去厕所的时间大盘爬上去了，下班的路上，大盘暴跌了，所以如何在利润锁定的范围内，降低这些突发性的风险？
+而且，人是很贪婪的，涨的很高，都不想卖，看着下跌，就等死套牢,这个机器人就是辅助你的眼睛，控制你的贪心，至于高买低卖，那个波动，因为这是为了获取拉升的一个机会风险,是否在你可忍受范围内，需要自我把握，
+
+配置可能是伴随市场动态调整的，所以也没什么赚钱的标准配置，需要自己体会。
+
+这个机器人有共振效应，假设很多人用同一个参数配置，很容易产生共振，被人利用，
+本机器人完全是开源的，如果你会点golang程序，可以自己写点策略，实现自己的操盘目标
+每个人的目标都不太一样
+有的人为了赚法币，有的为了赚比特币；）
+那算法可能不太一样
+
+
+若你有自己的方法，大把时间， 不一定非要用机器人
+有时候你自己操盘利润可能更多，不然操盘手都失业了。。
+
+使用指南如下:
+https://github.com/philsong/btcrobot/wiki/%E6%9C%BA%E5%99%A8%E4%BA%BA%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97 
+
+BTC捐助地址：1NDnnWCUu926z4wxA3sNBGYWNQD3mKyes8
+
+LTC捐助地址：LXwX5XeZeVfXM2b4GRs6HM1mNn4K9En3F4
+
+捐助清单如下：
+https://github.com/philsong/btcrobot/wiki/%E6%84%9F%E8%B0%A2%E6%8D%90%E5%8A%A9%E5%BC%80%E5%8F%91%E7%9A%84%E4%BA%BA
+
+
+安装说明（限win系统）如下：
+https://github.com/philsong/btcrobot/wiki/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E%EF%BC%88%E9%99%90win%E7%B3%BB%E7%BB%9F%EF%BC%89
+
+# 本地搭建 #
+
+0、
+
+0.0安装golang开发运行环境，选择适合自己电脑操作系统的安装包
+  
+  http://code.google.com/p/go/downloads/list
+
+0.1安装git环境
+
+  http://code.google.com/p/msysgit/downloads/list
+
+1、下载 btcrobot 代码
+	
+	git clone https://github.com/philsong/btcrobot
+
+2、下载安装依赖库
+
+	cd btcrobot/thirdparty
+	// windows/DOS下执行
+	getpkg.bat
+	// linux/mac或者Git Bash 下执行
+	sh getpkg
+
+3、编译 btcrobot
+
+先编译
+
+	// 接着上一步
+	cd ../
+	// windows/DOS 下执行
+	install.bat
+	// linux/mac或者Git Bash 下执行
+	sh install
+	
+这样便编译好了 btcrobot
+
+4、配置秘钥API文件
+
+修改btcrobot/conf目录下的secret.sample文件名为secret.json
+
+向火币或者OKcoin申请交易API，并填入secret.json中
+
+5、运行 btcrobot。
+
+	// windows 下执行
+	start.bat
+	// linux/mac或者Git Bash 下执行
+	sh start
+
+一切顺利的话，btcrobot应该就启动了。
+
+6、浏览器中查看
+
+在浏览器中输入：http://127.0.0.1:9090
+
+用默认用户名admin, 密码是123456 登录
+
+应该就能开始自动化交易之旅了。
+
+此时，你可以通过WEB界面配置各种参数，参数重启生效。
+
+
+注：在第5步运行前可以根据需要修改 conf目录里的 配置，亦可在第6步配置。
+

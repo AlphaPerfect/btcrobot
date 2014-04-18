@@ -3,6 +3,9 @@
 *.a
 *.so
 
+# mac file
+.DS_Store
+
 # Folders
 _obj
 _test
@@ -23,5 +26,15 @@ _testmain.go
 .idea
 *.exe
 secret.json
+cache
+bin
 log
 pid
+release
+pkg
+thirdparty/src
+src/github.com
+src/code.google.com
+src/labix.org
+kdj_ex.go
+kdj_xc.go
