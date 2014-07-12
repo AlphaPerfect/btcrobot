@@ -18,12 +18,14 @@
 package monitor
 
 import (
+	"bitvc"
 	. "common"
 	. "config"
 	"fmt"
 	"huobi"
 	"logger"
 	"okcoin"
+	"peatio"
 	"strategy"
 	"strconv"
 	"time"
@@ -54,9 +56,10 @@ func marketAPI() (marketAPI MarketAPI) {
 		marketAPI = huobi.NewHuobi()
 	} else if Option["datacenter"] == "okcoin" {
 		marketAPI = okcoin.NewOkcoin()
+	} else if Option["datacenter"] == "peatio" {
+		marketAPI = peatio.NewPeatio()
 	} else {
-		logger.Fatalln("Please config the datacenter firstly...")
-
+		logger.Fatalln("Please config the market center...")
 	}
 	return
 }
@@ -66,9 +69,12 @@ func tradeAPI() (tradeAPI TradeAPI) {
 		tradeAPI = huobi.NewHuobi()
 	} else if Option["tradecenter"] == "okcoin" {
 		tradeAPI = okcoin.NewOkcoin()
+	} else if Option["tradecenter"] == "bitvc" {
+		tradeAPI = bitvc.NewBitvc()
+	} else if Option["tradecenter"] == "peatio" {
+		tradeAPI = peatio.NewPeatio()
 	} else {
-		logger.Fatalln("Please config the tradecenter firstly...")
-
+		logger.Fatalln("Please config the exchange center...")
 	}
 	return
 }
@@ -79,6 +85,11 @@ func RobotWorker() {
 		fmt.Println("test working...")
 
 		var tradeAPI TradeAPI
+		tradeAPI = bitvc.NewBitvc()
+		tradeAPI.GetAccount()
+		//tradeAPI.GetOrderBook()
+		return
+
 		tradeAPI = okcoin.NewOkcoin()
 		tradeAPI.GetAccount()
 		tradeAPI.GetOrderBook()
@@ -106,7 +117,13 @@ func RobotWorker() {
 	go func() {
 		for _ = range ticker.C {
 			peroid, _ := strconv.Atoi(Option["tick_interval"])
-			ret, records := marketAPI().GetKLine(peroid)
+			strategyName := Option["strategy"]
+			ret := true
+			var records []Record
+			if strategyName != "OPENORDER" {
+				ret, records = marketAPI().GetKLine(peroid)
+			}
+
 			if ret != false {
 				strategy.Tick(tradeAPI(), records)
 			}
@@ -202,6 +219,34 @@ func testHuobiAPI() {
 	}
 
 	fmt.Println(tradeAPI.Get_orders())
+}
+
+func testBitVCAPI() {
+	tradeAPI := bitvc.NewBitvc()
+	accout_info, _ := tradeAPI.GetAccount()
+	fmt.Println(accout_info)
+	/*
+		//	fmt.Println(tradeAPI.GetAccount())
+		if false {
+			buyId := tradeAPI.BuyBTC("1000", "0.001")
+			sellId := tradeAPI.SellBTC("10000", "0.001")
+
+			//fmt.Println(tradeAPI.Get_delegations())
+			if tradeAPI.Cancel_order(buyId) {
+				fmt.Printf("cancel %s success \n", buyId)
+			} else {
+				fmt.Printf("cancel %s falied \n", buyId)
+			}
+
+			if tradeAPI.Cancel_order(sellId) {
+				fmt.Printf("cancel %s success \n", sellId)
+			} else {
+				fmt.Printf("cancel %s falied \n", sellId)
+			}
+		}
+
+		fmt.Println(tradeAPI.Get_orders())
+	*/
 }
 
 func testOkcoinBTCAPI() {

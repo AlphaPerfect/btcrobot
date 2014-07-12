@@ -7,18 +7,27 @@
 	
 	"from_email": "xxxx@gmail.com",
 
+	"bitvc_base_url" : "https://www.bitvc.com/",
+	"bitvc_login_url" : "https://www.bitvc.com/user/login",
+
+	"peatio_base_url": "https://demo.peat.io/",
+	"peatio_api_url": "https://peatio.com/api/v2/markets",
+	"peatio_kline_url": "https://peatio.com/market/?a=kline&period=%03d&r=%f",
+	"peatio_trade_detail": "http://peatio.com/staticmarket/detail.html?jsoncallback=jQuery%s_%d&_=%d",
+
+	
 	"hb_base_url": "https://www.huobi.com/",
 	"hb_api_url": "https://api.huobi.com/api.php",
 	"hb_kline_url": "https://market.huobi.com/market/huobi.php?a=kline&period=%03d&r=%f",
 	"hb_trade_detail": "http://market.huobi.com/staticmarket/detail.html?jsoncallback=jQuery%s_%d&_=%d",
 
-	"ok_base_url":"https://www.okcoin.com/",
-	"ok_api_userinfo":"https://www.okcoin.com/api/userinfo.do",
-	"ok_api_getorder":"https://www.okcoin.com/api/getorder.do",
-	"ok_api_cancelorder": "https://www.okcoin.com/api/cancelorder.do",
-	"ok_api_trade":"https://www.okcoin.com/api/trade.do",
-	"ok_kline_url":"https://www.okcoin.com/kline/period.do?step=%d&symbol=%s&nonce=%d",
-	"ok_depth_url":"https://www.okcoin.com/api/depth.do?symbol=%s",
+	"ok_base_url":"https://www.okcoin.cn/",
+	"ok_api_userinfo":"https://www.okcoin.cn/api/userinfo.do",
+	"ok_api_getorder":"https://www.okcoin.cn/api/getorder.do",
+	"ok_api_cancelorder": "https://www.okcoin.cn/api/cancelorder.do",
+	"ok_api_trade":"https://www.okcoin.cn/api/trade.do",
+	"ok_kline_url":"https://www.okcoin.cn/kline/period.do?step=%d&symbol=%s&nonce=%d",
+	"ok_depth_url":"https://www.okcoin.cn/api/depth.do?symbol=%s",
 
 	"debug": "1",
 	"errorconsole": "0",
@@ -26,5 +35,5 @@
 	"fatalconsole": "1",
 	"debugconsole": "0",
 
-	"env": "product"
+	"env": "dev22"
 }

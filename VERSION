@@ -76,4 +76,33 @@
 
                   optimze the code structure, to wirte strategy more simple now, just realize the "tick" function
 
+  Version 0.33
+  time 2014-04-23 refactor the web UI using flat design
+
+  Version 0.34
+  time 2014-04-24 support multiple okcoin API to do trade cluster.
+  
+  Version 0.35
+  time 2014-05-05 support HLCross strategy
+                  optimize the UI css
+                  add the disciple mode for EMA
+                  fix KDJ bugs div by 0
+
+  Version 0.36
+  time 2014-05-07 auto rename secret.sample to secret.json
+  
+  Version 0.37
+  time 2014-05-13 redesign the strategy API, make it simple and clear
+                  add a three crow strategy sample.
+
+  Version 0.38
+  time 2014-05-18 add  circular order strategy
+
+  Version 0.39
+  time 2014-05-21 add getorder interface for huobi
+                  save the tx record to leveldb
+
+  Version 0.40
+  time 2014-05-30 add kdj_ex strategy
+                  optimize setup progress
 */

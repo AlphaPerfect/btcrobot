@@ -21,6 +21,7 @@ import (
 	. "common"
 	. "config"
 	"logger"
+	"strconv"
 	"time"
 )
 
@@ -50,33 +51,49 @@ func (w Huobi) GetOrderBook() (ret bool, orderBook OrderBook) {
 }
 
 func (w Huobi) GetOrder(order_id string) (ret bool, order Order) {
+	tradeAPI := NewHuobiTrade(SecretOption["huobi_access_key"], SecretOption["huobi_secret_key"])
+
+	symbol := Option["symbol"]
+	if symbol == "ltc_cny" {
+		ret = false
+		return
+	}
+
+	ret, hbOrder := tradeAPI.Get_order(order_id)
+	if ret == false {
+		ret = false
+		return
+	}
+
+	order.Id = hbOrder.Id
+
+	Price, err := strconv.ParseFloat(hbOrder.Order_price, 64)
+	if err != nil {
+		logger.Errorln("config item order_price is not float")
+		ret = false
+		return
+	}
+	order.Price = Price
+
+	Amount, err := strconv.ParseFloat(hbOrder.Order_amount, 64)
+	if err != nil {
+		logger.Errorln("config item order_amount is not float")
+		ret = false
+		return
+	}
+	order.Amount = Amount
+
+	Deal_amount, err := strconv.ParseFloat(hbOrder.Processed_amount, 64)
+	if err != nil {
+		logger.Errorln("config item processed_amount is not float")
+		ret = false
+		return
+	}
+
+	order.Deal_amount = Deal_amount
+
+	ret = true
 	return
-	/*
-		symbol := Option["symbol"]
-		tradeAPI := NewHuobiTrade(SecretOption["huobi_access_key"], SecretOption["huobi_secret_key"])
-
-		ret, hbOrder := tradeAPI.Get_order(order_id)
-		if ret == false {
-			return
-		}
-
-		m.Orders_id = hbOrder.Id
-
-		m.Orders.Amount, err = strconv.ParseFloat(hbOrder.order_amount, 64)
-		if err != nil {
-			logger.Errorln("config item stoploss is not float")
-			return false
-		}
-
-		m.Orders.Deal_amount, err = strconv.ParseFloat(hbOrder.processed_amount, 64)
-		if err != nil {
-			logger.Errorln("config item stoploss is not float")
-			return false
-		}
-
-
-	*/
-	//return tradeAPI.Get_order(symbol, order_id)
 }
 
 func (w Huobi) GetKLine(peroid int) (ret bool, records []Record) {

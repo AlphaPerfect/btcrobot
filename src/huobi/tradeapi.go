@@ -133,13 +133,26 @@ type ErrorMsg struct {
 	Time int
 }
 
+type HBOrderItem struct {
+	Id               int
+	Type             int
+	order_price      float64
+	order_amount     float64
+	processed_amount float64
+	order_time       int
+}
+
 type HBOrder struct {
 	Id               int
 	Type             int
-	order_price      string
-	order_amount     string
-	processed_amount string
-	order_time       int
+	Order_price      string
+	Order_amount     string
+	Processed_amount string
+	Processed_price  string
+	Total            string
+	Fee              string
+	Vot              string
+	Status           int
 }
 
 func (w *HuobiTrade) check_json_result(body string) (errorMsg ErrorMsg, ret bool) {
@@ -179,7 +192,7 @@ type Account_info struct {
 
 func (w *HuobiTrade) GetAccount() (account_info Account_info, ret bool) {
 	pParams := make(map[string]string)
-	pParams["method"] = "GetAccount"
+	pParams["method"] = "get_account_info"
 	pParams["access_key"] = w.access_key
 	now := time.Now().Unix()
 	pParams["created"] = strconv.FormatInt(now, 10)
@@ -211,7 +224,7 @@ func (w *HuobiTrade) GetAccount() (account_info Account_info, ret bool) {
 	return
 }
 
-func (w *HuobiTrade) Get_orders() (ret bool, m []HBOrder) {
+func (w *HuobiTrade) Get_orders() (ret bool, m []HBOrderItem) {
 	pParams := make(map[string]string)
 	pParams["method"] = "get_orders"
 	pParams["access_key"] = w.access_key
@@ -245,7 +258,7 @@ func (w *HuobiTrade) Get_orders() (ret bool, m []HBOrder) {
 	return
 }
 
-func (w *HuobiTrade) Get_order(id string) (string, error) {
+func (w *HuobiTrade) Get_order(id string) (ret bool, m HBOrder) {
 	pParams := make(map[string]string)
 	pParams["method"] = "order_info"
 	pParams["access_key"] = w.access_key
@@ -254,7 +267,31 @@ func (w *HuobiTrade) Get_order(id string) (string, error) {
 	pParams["created"] = strconv.FormatInt(now, 10)
 	pParams["sign"] = w.createSign(pParams)
 
-	return w.httpRequest(pParams)
+	ret = true
+
+	body, err := w.httpRequest(pParams)
+	if err != nil {
+		ret = false
+		logger.Infoln(err)
+		return
+	}
+
+	_, ret = w.check_json_result(body)
+	if ret == false {
+		logger.Infoln(body)
+		return
+	}
+
+	doc := json.NewDecoder(strings.NewReader(body))
+	if err := doc.Decode(&m); err == io.EOF {
+		ret = false
+		logger.Infoln(err)
+	} else if err != nil {
+		ret = false
+		logger.Infoln(err)
+	}
+
+	return
 }
 
 func (w *HuobiTrade) Cancel_order(id string) bool {
